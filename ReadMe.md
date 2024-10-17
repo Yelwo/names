@@ -1,6 +1,6 @@
 # Names Project
 
-File main.py exports names.csv to db.sqlite3 through DRF API. Browsable API allows users to create, edit and display folders and name.
+File main.py exports names.csv to db.sqlite3 through DRF API. Browsable API allows users to create, edit and display folders and names.
 
 ## Project setup
 
