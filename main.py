@@ -64,4 +64,3 @@ with open('names.csv') as names:
             response = requests.post('http://127.0.0.1:8000/names/', json={'name_text': value, 'folder': folder['id']})
             print(response.text)
             print(f'{folder['id']} : {value}')
-    # print(get_prefixes(names))
