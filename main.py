@@ -2,25 +2,32 @@ import os
 import requests
 from string import punctuation
 
-def get_delimiter(name):
-    for c in name:
-        if c in punctuation:
-            return c
-
 
 def add_common_prefix(prefix, name, prefixes):
-    if common_prefix := os.path.commonprefix([name, prefix]):
-        prefixes[common_prefix.strip(punctuation)] = [name]
+    if not (common_prefix := os.path.commonprefix([name, prefix])):
+        return prefixes
+
+    # last char of common prefix has to be a delimiter
+    if common_prefix[-1] not in punctuation:
+        return prefixes
+
+    key = common_prefix.strip(punctuation)
+    if key in prefixes:
+        if name not in prefixes[key]:
+            prefixes[key].append(name)
+    else:
+        prefixes[key] = [name, prefix]
     return prefixes
 
 
 def add_name_to_prefixes(name, prefixes):
     prefixes[name] = [name]
-    for prefix in list(prefixes):
-        if prefix in name and prefix != name:
-            prefixes[prefix].append(name)
-        else:
-            prefixes = add_common_prefix(prefix, name, prefixes)
+    for prefix in sorted(prefixes):
+        if name != prefix:
+            if (prefix in name) and (prefix != name):
+                prefixes[prefix].append(name)
+            else:
+                prefixes = add_common_prefix(prefix, name, prefixes)
     return prefixes
 
 
