@@ -24,7 +24,7 @@ def add_name_to_prefixes(name, prefixes):
     prefixes[name] = [name]
     for prefix in sorted(prefixes):
         if name != prefix:
-            if (prefix in name) and (prefix != name):
+            if name.startswith(prefix) and (prefix != name):
                 prefixes[prefix].append(name)
             else:
                 prefixes = add_common_prefix(prefix, name, prefixes)
@@ -61,5 +61,7 @@ with open('names.csv') as names:
     for prefix, values in get_prefixes(names).items():
         folder = requests.post('http://127.0.0.1:8000/folders/', json={'title': prefix}).json()
         for value in values:
-            requests.post('http://127.0.0.1:8000/names/', json={'name_text': value, 'folder': folder['id']})
-
+            response = requests.post('http://127.0.0.1:8000/names/', json={'name_text': value, 'folder': folder['id']})
+            print(response.text)
+            print(f'{folder['id']} : {value}')
+    # print(get_prefixes(names))
